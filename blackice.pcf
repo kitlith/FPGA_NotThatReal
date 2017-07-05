@@ -1,0 +1,19 @@
+set_io clk 129
+
+#pmod 1
+set_io ntr_data[0] 94
+set_io ntr_data[1] 91
+set_io ntr_data[2] 88 # rd2
+set_io ntr_data[3] 85 # rd0
+
+#pmod 2
+set_io ntr_data[4] 95 # rd7
+set_io ntr_data[5] 93 # rd5
+set_io ntr_data[6] 90 # rd3
+set_io ntr_data[7] 87 # rd1
+
+#pmod 3
+set_io ntr_clk 105
+
+#pmod 14
+set_io led 70
