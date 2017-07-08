@@ -16,7 +16,8 @@ chip.blif: $(SOURCES)
 .PHONY: upload clean sim default mystorm
 
 upload:
-	cat chip.bin >/dev/ttyUSB0
+	stty -F /dev/ttyACM0 raw
+	cat chip.bin >/dev/ttyACM0
 
 clean:
 	$(RM) -f chip.{blif,txt,ex,bin}

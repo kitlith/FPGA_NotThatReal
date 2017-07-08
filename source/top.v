@@ -1,12 +1,14 @@
 `include "parallel.v"
 
-module top(clk, ntr_data, ntr_clk, led);
+module top(clk, ntr_data, ntr_clk, leds);
 
     parameter init = 0, wait_ready = 1, set_led = 2, wait_next = 3;
 
     input clk, ntr_clk;
     input [7:0] ntr_data;
-    output reg led;
+    output [3:0] leds;
+
+    reg led;
 
     wire [63:0] command;
 
@@ -36,10 +38,12 @@ module top(clk, ntr_data, ntr_clk, led);
     end
 
     always @* begin
-        if (state == init) led = 0;
+        if (state == init) led = 1;
         if (state == set_led) begin
-            if (command[7:0] == 8'hFF) led = command[56] & 1;
+            if (command[7:0] == 8'h00) led = 0;
         end
     end
+
+    assign leds = {led, led, led, led};
 
 endmodule
