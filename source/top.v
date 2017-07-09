@@ -38,12 +38,12 @@ module top(clk, ntr_data, ntr_clk, leds);
     end
 
     always @* begin
-        if (state == init) led = 1;
+        if (state == init) led = 0;
         if (state == set_led) begin
-            if (command[7:0] == 8'h00) led = 0;
+            if (command[7:0] == 8'hff) led = command[56];
         end
     end
 
-    assign leds = {led, led, led, led};
+    assign leds = {led, led, led, ready};
 
 endmodule

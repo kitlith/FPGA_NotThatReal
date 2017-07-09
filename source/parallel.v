@@ -24,7 +24,10 @@ module parallel(clk, data, par_clk, command, ready);
 
     always @(posedge clk) begin
         case (state)
-            init: state <= wait_high;
+            init: begin
+                if (par_clk == 1) state <= wait_low;
+                else state <= init;
+            end
             wait_high, dat_ready: begin
                 if (par_clk == 1) state <= sample;
                 else state <= state;
