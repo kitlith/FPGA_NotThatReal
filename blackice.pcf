@@ -14,10 +14,10 @@ set_io ntr_data[7] 87 # rd1
 
 #pmod 3
 set_io ntr_clk 105
+set_io ntr_cs1 102
 
 #pmod 14
 set_io leds[0] 71
 set_io leds[1] 67
 set_io leds[2] 68
 set_io leds[3] 70
-

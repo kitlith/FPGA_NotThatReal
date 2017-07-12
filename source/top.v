@@ -1,10 +1,10 @@
-`include "parallel.v"
+`include "ntr.v"
 
-module top(clk, ntr_data, ntr_clk, leds);
+module top(clk, ntr_data, ntr_clk, ntr_cs1, leds);
 
     parameter init = 0, wait_ready = 1, set_led = 2, wait_next = 3;
 
-    input clk, ntr_clk;
+    input clk, ntr_clk, ntr_cs1;
     input [7:0] ntr_data;
     output [3:0] leds;
 
@@ -13,12 +13,18 @@ module top(clk, ntr_data, ntr_clk, leds);
     wire [63:0] command;
 
     reg [2:0] state;
-    wire ready;
+    wire ready, enable;
+    wire [2:0] count;
+    wire [2:0] debug;
 
-    parallel ntr_bus(clk, ntr_data, ntr_clk, command, ready);
+    // assign enable = ~ntr_cs1; // CS1 is active low.
+
+    // parallel ntr_bus(clk, ntr_data, ntr_clk, command, ready, ntr_cs1, debug);
+    ntr ntr_bus(ntr_clk, ntr_cs1, ntr_data, command, ready, count);
 
     initial begin
         state = init;
+        // $monitor("command: %x, ready: %b, led: %b, count: %d", command, ready, command[56], count);
         //led = 0;
     end
 
@@ -44,6 +50,6 @@ module top(clk, ntr_data, ntr_clk, leds);
         end
     end
 
-    assign leds = {led, led, led, ready};
+    assign leds = {led, count};
 
 endmodule
