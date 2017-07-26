@@ -15,14 +15,14 @@ module top(clk, ntr_data, ntr_clk, ntr_cs1, leds);
 
     reg [2:0] state;
     wire ready, enable;
-    wire [2:0] count;
+    wire [3:0] count;
     wire [2:0] debug;
     wire debounced_ntr_clk;
 
     // assign enable = ~ntr_cs1; // CS1 is active low.
 
     // parallel ntr_bus(clk, ntr_data, ntr_clk, command, ready, ntr_cs1, debug);
-    debouncer #(0,2) debonce(clk, ntr_clk, debounced_ntr_clk);
+    debouncer #(0,2) debounce(clk, ntr_clk, debounced_ntr_clk);
     ntr ntr_bus(debounced_ntr_clk, ntr_cs1, ntr_data, command, ready, count);
 
     initial begin
@@ -53,6 +53,6 @@ module top(clk, ntr_data, ntr_clk, ntr_cs1, leds);
         end
     end
 
-    assign leds = {led, count};
+    assign leds = {led, count[2:0]};
 
 endmodule

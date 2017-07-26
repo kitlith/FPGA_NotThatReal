@@ -1,24 +1,20 @@
-module up_counter(clk, en, rst, out, overflow);
+module up_counter(clk, en, rst, out);
     parameter WIDTH = 8, MAX = 255;
 
     input clk, en, rst;
     output reg [WIDTH-1:0] out;
-    output reg overflow;
 
     initial begin
         out = 0;
     end
 
-    always @(posedge clk) begin
+    always @(posedge clk or posedge rst) begin
         if (rst) begin
-            overflow <= 0;
+            out <= 0;
         end
-        if (en) begin
-            if (out >= MAX) begin
-                overflow <= 1;
-                out <= 0;
-            end
-            else out <= out + 1;
+        else if (en) begin
+            if (out < MAX) out <= out + 1;
+            else out <= out;
         end
         else out <= out;
     end

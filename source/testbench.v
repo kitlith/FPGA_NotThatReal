@@ -42,6 +42,9 @@ module testbench();
         #10 ntr_clk = 0;
         #5 ntr_data = 8'h01;
         #5 ntr_clk = 1;
+        #20 ntr_cs1 = 1;
+
+        #20 ntr_cs1 = 0;
         #10 ntr_clk = 0;
         #5 ntr_data = 8'hFF;
         #5 ntr_clk = 1;
