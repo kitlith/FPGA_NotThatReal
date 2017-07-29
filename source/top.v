@@ -18,16 +18,18 @@ module top(clk, ntr_data, ntr_clk, ntr_cs1, leds);
     wire [3:0] count;
     wire [2:0] debug;
     wire debounced_ntr_clk;
+    wire debounced_ntr_cs1;
 
     // assign enable = ~ntr_cs1; // CS1 is active low.
 
     // parallel ntr_bus(clk, ntr_data, ntr_clk, command, ready, ntr_cs1, debug);
-    debouncer #(0,2) debounce(clk, ntr_clk, debounced_ntr_clk);
-    ntr ntr_bus(debounced_ntr_clk, ntr_cs1, ntr_data, command, ready, count);
+    debouncer #(0,5) debounce_clk(clk, ntr_clk, debounced_ntr_clk);
+    debouncer #(0,3) debounce_cs1(clk, ntr_cs1, debounced_ntr_cs1);
+    ntr ntr_bus(debounced_ntr_clk, debounced_ntr_cs1, ntr_data, command, ready, count);
 
     initial begin
         state = init;
-        // $monitor("command: %x, ready: %b, led: %b, count: %d", command, ready, command[56], count);
+        // $monitor("command: %x, cs1: %b, ready: %b, led: %b, count: %d", command, ntr_cs1, ready, led, count);
         //led = 0;
     end
 
@@ -35,22 +37,23 @@ module top(clk, ntr_data, ntr_clk, ntr_cs1, leds);
         case (state)
             init: state <= wait_ready;
             wait_ready: begin
-                if (ready) state <= set_led;
-                else state <= state;
+                if (ready == 1'b1) state <= set_led;
+                else state <= wait_ready;
             end
             set_led: state <= wait_next;
             wait_next: begin
-                if (ready) state <= state;
-                else state <= wait_ready;
+                if (ready == 1'b0) state <= wait_ready;
+                else state <= wait_next;
             end
         endcase
     end
 
     always @* begin
         if (state == init) led = 0;
-        if (state == set_led) begin
+        else if (state == set_led) begin
             if (command[7:0] == 8'hff) led = command[56];
-        end
+            else led = led;
+        end else led = led;
     end
 
     assign leds = {led, count[2:0]};

@@ -9,25 +9,24 @@ module ntr(
 );
 
     // reg [3:0] count;
-    wire cnt_rst;
-    up_counter #(.WIDTH(4), .MAX(8)) counter(clk, 1'b1, cs1, count);
+    wire cnt_en;
+    assign cnt_en = ~cs1;
+    up_counter #(.WIDTH(4), .MAX(9)) counter(clk, cnt_en, cs1, count);
 
     initial begin
-        command = 0;
+        command = 64'd0;
         ready = 0;
     end
 
-    always @(posedge clk or posedge cs1) begin
-        if (cs1) begin
-            command <= command;
-        end else begin
+    always @(posedge clk) begin
+        if (cs1 == 1'b0) begin
             command <= {data[7:0], command[63:8]};
             // count <= count + 1;
         end
     end
 
     always @* begin
-        if (count == 8) ready = 1;
+        if (count == 9) ready = 1;
         else ready = 0;
 
         // if (overflow) cnt_rst = 1;

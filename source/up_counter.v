@@ -8,7 +8,7 @@ module up_counter(clk, en, rst, out);
         out = 0;
     end
 
-    always @(posedge clk or posedge rst) begin
+    always @(posedge clk) begin
         if (rst) begin
             out <= 0;
         end
