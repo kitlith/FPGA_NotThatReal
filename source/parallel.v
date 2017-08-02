@@ -1,6 +1,6 @@
 `include "up_counter.v"
 `include "byte_shifter.v"
-module parallel #(parameter CMD_CYCLES = 8) (
+module parallel #(parameter CMD_CYCLES = 9) (
     input clk,
     input ntr_clk,
     input ntr_cs1,
