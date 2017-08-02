@@ -1,4 +1,5 @@
-// `include "up_counter.v"
+// https://github.com/CospanDesign/nysa-sata/blob/master/rtl/generic/debounce.v
+// MIT Licensed
 module debouncer #(
   parameter INITIAL_STATE     = 0,
   parameter DEBOUNCE_COUNT    = 100

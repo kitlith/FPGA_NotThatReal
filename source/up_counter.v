@@ -9,13 +9,9 @@ module up_counter(clk, en, rst, out);
     end
 
     always @(posedge clk) begin
-        if (rst) begin
-            out <= 0;
-        end
+        if (rst) out <= 0;
         else if (en) begin
             if (out < MAX) out <= out + 1;
-            else out <= out;
         end
-        else out <= out;
     end
 endmodule

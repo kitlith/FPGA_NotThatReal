@@ -1,35 +1,44 @@
+// `include "parallel.v"
 `include "ntr.v"
 `include "debouncer.v"
+`include "ppio.v"
 
-module top(clk, ntr_data, ntr_clk, ntr_cs1, leds);
+module top(
+    input clk,
+    inout [7:0] ntr_data,
+    input ntr_clk,
+    input ntr_cs1,
+    output [3:0] leds);
 
     parameter init = 0, wait_ready = 1, set_led = 2, wait_next = 3;
 
-    input clk, ntr_clk, ntr_cs1;
-    input [7:0] ntr_data;
-    output [3:0] leds;
+    wire [7:0] ntr_data_in;
+    reg [7:0] ntr_data_out;
+    reg ntr_dir;
 
     reg led;
 
     wire [63:0] command;
 
     reg [2:0] state;
+
     wire ready, enable;
     wire [3:0] count;
     wire [2:0] debug;
-    wire debounced_ntr_clk;
-    wire debounced_ntr_cs1;
+    wire debounced_ntr_clk, debounced_ntr_cs1;
 
     // assign enable = ~ntr_cs1; // CS1 is active low.
+    assign ntr_dir = 1'b0;
 
-    // parallel ntr_bus(clk, ntr_data, ntr_clk, command, ready, ntr_cs1, debug);
-    debouncer #(0,5) debounce_clk(clk, ntr_clk, debounced_ntr_clk);
-    debouncer #(0,3) debounce_cs1(clk, ntr_cs1, debounced_ntr_cs1);
-    ntr ntr_bus(debounced_ntr_clk, debounced_ntr_cs1, ntr_data, command, ready, count);
+    debouncer #(0,2) debounce_clk(clk, ntr_clk, debounced_ntr_clk);
+    debouncer #(0,2) debounce_cs1(clk, ntr_cs1, debounced_ntr_cs1);
+    ppio #(8) ntr_bus(ntr_dir, ntr_data, ntr_data_in, ntr_data_out);
+    // parallel ntr_decode(clk, debounced_ntr_clk, debounced_ntr_cs1, ntr_data_in, command, ready, count);
+    ntr ntr_decode(debounced_ntr_clk, debounced_ntr_cs1, ntr_data_in, command, ready, count);
 
     initial begin
         state = init;
-        // $monitor("command: %x, cs1: %b, ready: %b, led: %b, count: %d", command, ntr_cs1, ready, led, count);
+        $monitor("command: %x, cs1: %b, ready: %b, led: %b, count: %d", command, ntr_cs1, ready, led, count);
         //led = 0;
     end
 
@@ -51,11 +60,11 @@ module top(clk, ntr_data, ntr_clk, ntr_cs1, leds);
     always @* begin
         if (state == init) led = 0;
         else if (state == set_led) begin
-            if (command[7:0] == 8'hff) led = command[56];
+            if (command[15:8] == 8'hff) led = command[56];
             else led = led;
         end else led = led;
     end
 
-    assign leds = {led, count[2:0]};
+    assign leds = {led, count[3:1]};
 
 endmodule
