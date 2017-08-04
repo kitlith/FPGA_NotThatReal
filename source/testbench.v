@@ -42,9 +42,6 @@ module testbench();
         #10 ntr_cs1 = 0;
         #10 ntr_clk = 0;
 
-        #10 ntr_clk = 1; // Extra clock to match HW behavior
-        #10 ntr_clk = 0;
-
         #0  dat_out = 8'hFF;
         #10 ntr_clk = 1; // sample 0xFF
 
@@ -68,9 +65,6 @@ module testbench();
         #20 ntr_cs1 = 1;
 
         #100 ntr_cs1 = 0;
-        #10 ntr_clk = 0;
-
-        #10 ntr_clk = 1; // Extra clock to match HW behavior
         #10 ntr_clk = 0;
 
         #0 dat_out = 8'hFF;

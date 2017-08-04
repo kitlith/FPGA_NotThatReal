@@ -34,7 +34,7 @@ module top(
     debouncer #(0,2) debounce_clk(clk, ntr_clk, debounced_ntr_clk);
     debouncer #(0,2) debounce_cs1(clk, ntr_cs1, debounced_ntr_cs1);
     // ppio #(8) ntr_bus(in_en, ntr_data, ntr_data_out, ntr_data_in);
-    parallel #(9) ntr_decode(clk, debounced_ntr_clk, debounced_ntr_cs1, ntr_data, command, ready, count);
+    parallel #(8) ntr_decode(clk, debounced_ntr_clk, debounced_ntr_cs1, ntr_data, command, ready, count);
     // ntr #(9) ntr_decode(debounced_ntr_clk, debounced_ntr_cs1, ntr_data_in, command, ready, count);
 
     initial begin
@@ -70,6 +70,6 @@ module top(
         // else in_en = 1;
     end
 
-    assign leds = {led, count[3:1]};
+    assign leds = {led, count[2:0]};
 
 endmodule
