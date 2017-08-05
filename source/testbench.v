@@ -42,10 +42,10 @@ module testbench();
         #10 ntr_cs1 = 0;
         #10 ntr_clk = 0;
 
-	#10 ntr_clk = 1; // Extra clk to match random cycle that happens
-	#10 ntr_clk = 0; // deterministically sometimes?
+        #10 ntr_clk = 1; // Extra clk to match random cycle that happens
+        #10 ntr_clk = 0; // deterministically sometimes?
 
-        #0  dat_out = 8'hFF;
+        #0  dat_out = 8'h90;
         #10 ntr_clk = 1; // sample 0xFF
 
         #10 ntr_clk = 0;
@@ -63,27 +63,27 @@ module testbench();
         #10 ntr_clk = 0;
         #10 ntr_clk = 1; // sample 0x00
         #10 ntr_clk = 0;
-        #0 dat_out = 8'h01;
+        #0 dat_out = 8'h00;
         #10 ntr_clk = 1; // sample 0x01
 
-	#10 ntr_clk = 0; // response
-	#0  ntr_dir = INPUT;
-	#10 ntr_clk = 1;
-	#10 ntr_clk = 0;
-	#10 ntr_clk = 1;
-	#10 ntr_clk = 0;
-	#10 ntr_clk = 1;
-	#10 ntr_clk = 0;
-	#10 ntr_clk = 1;
+        #10 ntr_clk = 0; // response
+        #0  ntr_dir = INPUT;
+        #10 ntr_clk = 1;
+        #10 ntr_clk = 0;
+        #10 ntr_clk = 1;
+        #10 ntr_clk = 0;
+        #10 ntr_clk = 1;
+        #10 ntr_clk = 0;
+        #10 ntr_clk = 1;
 
-	#20 ntr_cs1 = 1;
-	#0  ntr_dir = OUTPUT;
+        #20 ntr_cs1 = 1;
+        #0  ntr_dir = OUTPUT;
 
         #100 ntr_cs1 = 0;
         #10 ntr_clk = 0;
 
-	#10 ntr_clk = 1; // See above comment.
-	#10 ntr_clk = 0;
+        #10 ntr_clk = 1; // See above comment.
+        #10 ntr_clk = 0;
 
         #0 dat_out = 8'hFF;
         #10 ntr_clk = 1;
@@ -101,7 +101,7 @@ module testbench();
         #10 ntr_clk = 0;
         #10 ntr_clk = 1;
         #10 ntr_clk = 0;
-        #0 dat_out = 8'h00;
+        #0 dat_out = 8'h01;
         #10 ntr_clk = 1;
         #10 ntr_clk = 0;
         #20 $finish;

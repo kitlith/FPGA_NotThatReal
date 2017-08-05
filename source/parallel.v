@@ -6,15 +6,14 @@ module parallel #(parameter CMD_CYCLES = 9) (
     input ntr_cs1,
     input [7:0] ntr_data,
     output wire [63:0] command,
-    output reg ready,
-    output wire [3:0] count);
+    output reg ready);
 
     parameter init = 0, wait_high = 2, sample = 1, wait_low = 4,
               cmd_ready = 3;
 
     reg [2:0] state;
 
-    // wire [3:0] count;
+    wire [3:0] count;
     reg enable, count_rst;
     byte_shifter shift(clk, ntr_data, enable, 1'b0, command);
     up_counter #(4, CMD_CYCLES - 1) counter(clk, enable, count_rst, count);
