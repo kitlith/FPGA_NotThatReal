@@ -3,6 +3,7 @@
 `include "ntr_respond.v"
 `include "debouncer.v"
 `include "ppio.v"
+`include "fifo.v"
 
 module top(
     input clk,
@@ -30,6 +31,11 @@ module top(
     reg [31:0] data_word;
     wire request_word;
     ntr_respond respond(debounced_ntr_clk, ready, data_word, ntr_data_out, request_word);
+
+    wire empty, full, serial_data;
+    reg fifo_rd_en, fifo_wr_en;
+    aFifo #(.DATA_WIDTH(8), .ADDRESS_WIDTH(9)) serial_buffer(ntr_data_out, empty, fifo_en, ntr_clk,
+                                                             serial_data, full, fifo_wr_en, clk, 1'b0);
 
     reg [2:0] state;
     reg led;
