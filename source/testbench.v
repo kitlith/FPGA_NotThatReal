@@ -12,6 +12,9 @@ module testbench();
     parameter INPUT=1, OUTPUT=0;
     reg ntr_dir;
 
+    reg rx;
+    wire tx;
+
     // assign ntr_data = dat_out;
 
     ppio #(8) bus(ntr_dir, ntr_data, dat_out, dat_in);
@@ -22,7 +25,7 @@ module testbench();
 
     wire [3:0] led;
 
-    top test(clk, ntr_data, ntr_clk, ntr_cs1, led);
+    top test(clk, ntr_data, ntr_clk, ntr_cs1, rx, tx, led);
 
     initial begin
         clk = 0;
@@ -42,8 +45,8 @@ module testbench();
         #10 ntr_cs1 = 0;
         #10 ntr_clk = 0;
 
-        #10 ntr_clk = 1; // Extra clk to match random cycle that happens
-        #10 ntr_clk = 0; // deterministically sometimes?
+        // #10 ntr_clk = 1; // Extra clk to match random cycle that happens
+        // #10 ntr_clk = 0; // deterministically sometimes?
 
         #0  dat_out = 8'h90;
         #10 ntr_clk = 1; // sample 0xFF
@@ -82,8 +85,8 @@ module testbench();
         #100 ntr_cs1 = 0;
         #10 ntr_clk = 0;
 
-        #10 ntr_clk = 1; // See above comment.
-        #10 ntr_clk = 0;
+        // #10 ntr_clk = 1; // See above comment.
+        // #10 ntr_clk = 0;
 
         #0 dat_out = 8'hFF;
         #10 ntr_clk = 1;

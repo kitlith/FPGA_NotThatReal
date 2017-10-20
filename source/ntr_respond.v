@@ -12,7 +12,6 @@ module ntr_respond(
     assign count[2:0] = 0;
 
     always @(negedge clk) begin
-        $display("count: %d", count);
         if (en) begin
             out <= (data >> (24 - count)) & 8'hFF;
         end

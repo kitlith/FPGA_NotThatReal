@@ -60,7 +60,7 @@ module aFifo
     assign NextReadAddressEn  = ReadEn_in  & ~Empty_out;
 
     //Addreses (Gray counters) logic:
-    GrayCounter GrayCounter_pWr
+    GrayCounter #(.COUNTER_WIDTH(ADDRESS_WIDTH)) GrayCounter_pWr
        (.GrayCount_out(pNextWordToWrite),
 
         .Enable_in(NextWriteAddressEn),
@@ -69,7 +69,7 @@ module aFifo
         .Clk(WClk)
        );
 
-    GrayCounter GrayCounter_pRd
+    GrayCounter #(.COUNTER_WIDTH(ADDRESS_WIDTH)) GrayCounter_pRd
        (.GrayCount_out(pNextWordToRead),
         .Enable_in(NextReadAddressEn),
         .Clear_in(Clear_in),
