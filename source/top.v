@@ -19,9 +19,10 @@ module top(
 
     parameter init = 0, wait_ready = 1, do_command = 2, wait_next = 3;
 
-    wire debounced_ntr_clk, debounced_ntr_cs1;
+    wire debounced_ntr_clk, debounced_ntr_cs1, debounced_rx;
     debouncer #(0,2) debounce_clk(clk, ntr_clk, debounced_ntr_clk);
     debouncer #(0,2) debounce_cs1(clk, ntr_cs1, debounced_ntr_cs1);
+    debouncer #(0,2) debounce_uart(clk, rx, debounced_rx);
 
     wire [7:0] ntr_data_in;
     wire [7:0] ntr_data_out;
@@ -39,7 +40,7 @@ module top(
 
     wire [7:0] serial_data;
     wire serial_ready, serial_done;
-    uart_in serial_rx(rx, serial_data, clk, 1'b0, serial_ready);
+    uart_in serial_rx(debounced_rx, serial_data, clk, 1'b0, serial_ready);
     // uart_out serial_tx(serial_data, serial_ready, 1'b0, tx, serial_done, clk);
 
     wire fifo_empty, fifo_full;
