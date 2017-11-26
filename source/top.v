@@ -11,11 +11,17 @@
 module top(
     input clk,
     inout [7:0] ntr_data,
-    input ntr_clk,
-    input ntr_cs1,
+    input ntr_clk_pin,
+    input ntr_cs1_pin,
     input rx,
     output tx,
     output [3:0] leds);
+
+    wire ntr_clk;
+    pullup_in #(1) ntr_clk_config(ntr_clk_pin, ntr_clk);
+
+    wire ntr_cs1;
+    pullup_in #(1) ntr_cs1_config(ntr_cs1_pin, ntr_cs1);
 
     parameter init = 0, wait_ready = 1, do_command = 2, wait_next = 3;
 

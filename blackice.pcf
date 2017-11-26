@@ -13,8 +13,8 @@ set_io ntr_data[6] 90 # rd3
 set_io ntr_data[7] 87 # rd1
 
 #pmod 3
-set_io ntr_clk 105
-set_io ntr_cs1 102
+set_io ntr_clk_pin 105
+set_io ntr_cs1_pin 102
 
 #pmod 13
 set_io rx 29

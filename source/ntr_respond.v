@@ -7,7 +7,7 @@ module ntr_respond(
     output reg request);
 
     wire [4:0] count; // Max greater than (2^WIDTH)-1 should overflow.
-    up_counter #(.WIDTH(2), .MAX(4)) data_pos(clk, en, 1'b0, count[4:3]);
+    up_counter #(.WIDTH(2), .MAX(4)) data_pos(clk, en, ~en, count[4:3]);
 
     assign count[2:0] = 0;
 

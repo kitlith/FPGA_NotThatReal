@@ -68,13 +68,35 @@ module	ppio(i_dir, io_data, i_data, o_data);
 	generate
 	for(k=0; k<W; k = k+1)
 		SB_IO #(.PULLUP(1'b0),
-			.PIN_TYPE(6'b101001))
+			.PIN_TYPE(6'b1010_01))
 			theio(
 				.OUTPUT_ENABLE(!i_dir),
 				.PACKAGE_PIN(io_data[k]),
 				.D_OUT_0(i_data[k]),
 				.D_IN_0( o_data[k])
 			);
+	endgenerate
+
+endmodule
+
+// The following is my own code, but healilly based on ppio, above.
+
+    module	pullup_in(package_pins, out);
+    parameter	W=8;
+
+    input	[(W-1):0]	package_pins;
+    output	[(W-1):0]	out;
+
+    genvar	k;
+    generate
+    for(k=0; k<W; k = k+1)
+        SB_IO #(
+            .PULLUP(1'b1),
+            .PIN_TYPE(6'b0000_01)
+        ) theio (
+            .PACKAGE_PIN(package_pins[k]),
+            .D_IN_0(out[k])
+        );
 	endgenerate
 
 endmodule
